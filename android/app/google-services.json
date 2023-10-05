@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "615088349750",
+    "firebase_url": "https://login-vet-app-default-rtdb.firebaseio.com",
+    "project_id": "login-vet-app",
+    "storage_bucket": "login-vet-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:615088349750:android:9a84a891395ca9956bee97",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWJj1rM6LjIEF4A58clGnghEJ-OPBKU1o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:615088349750:android:2b5dec59a0ad30766bee97",
+        "android_client_info": {
+          "package_name": "com.example.vet_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWJj1rM6LjIEF4A58clGnghEJ-OPBKU1o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:615088349750:android:a64b6bd413a1c53b6bee97",
+        "android_client_info": {
+          "package_name": "com.example.vetapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWJj1rM6LjIEF4A58clGnghEJ-OPBKU1o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
