@@ -43,6 +43,11 @@ class MainApp extends StatelessWidget {
           child: LoginWidget(),
         ),
       ),
+      routes: {
+        //'/':(context) => LoginWidget(),
+        '/home':(context) => HomePage(),
+        '/register':(context) => RegisterPet(),
+      },
     );
   }
 }
@@ -101,10 +106,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                     email: login.text, password: password.text
                   );
                 print("USER LOGGED IN: ${user.user?.uid}");
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomePage()),
-                );
+                Navigator.pushNamed(context, '/home');
               } catch (e){
                 print(e);
               }
@@ -119,9 +121,8 @@ class _LoginWidgetState extends State<LoginWidget> {
                   email: login.text, password: password.text
                 );
               print(user.user?.uid);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomePage()),
+              Navigator.pushNamed(
+                  context, '/home'
                 );
             } on FirebaseAuthException catch (e){
               if(e.code == 'weak-password'){
@@ -132,25 +133,6 @@ class _LoginWidgetState extends State<LoginWidget> {
               print(e);
             }
           }, child: const Text("Sign Up")),
-
-        TextButton(
-          onPressed: () async{
-            //create an object that will be translated into a document
-            //remember - firestore has a structure in which collections contain documents
-            //documents are similar to records in a relational db
-            final puppy = <String, dynamic> {
-              "Name" : "Killer",
-              "Age" : 2,
-              "Weight" : 3,
-              "Pet Kind": "Penguin"
-            };
-
-            //add user into firestore collection
-            db.collection("PETS").add(puppy).then(
-              (DocumentReference doc) =>
-                print("new document created")
-            );
-          }, child: const Text("Add record")),
       ],
     );
   }
@@ -255,7 +237,10 @@ class _HomePageState extends State<HomePage> {
             ElevatedButton(
               onPressed: () async {
                 await FirebaseAuth.instance.signOut();
-                Navigator.pop(context);
+                Navigator.popUntil(
+                  context,
+                  ModalRoute.withName('/'),
+                );
               },
               child: const Text('Log Out'),
             ),
@@ -322,12 +307,102 @@ class RegisterPet extends StatefulWidget {
 }
 
 class _RegisterPetState extends State<RegisterPet> {
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _ageController = TextEditingController();
+  final _weightController = TextEditingController();
+  final _typeController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Register New Pet Page'),
+        title: Text('Register Pet'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                controller: _nameController,
+                decoration: InputDecoration(
+                  labelText: 'Pet Name',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty){
+                    return 'Please enter a Name';
+                  }
+                  return null;
+                },
+              ),
+
+              TextFormField(
+                controller: _ageController,
+                decoration: InputDecoration(
+                  labelText: 'Pet Age',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty){
+                    return 'Please enter the pet age';
+                  }
+                  return null;
+                },
+              ),
+
+              TextFormField(
+                controller: _weightController,
+                decoration: InputDecoration(
+                  labelText: 'Pet Weight',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty){
+                    return 'Please enter the weight';
+                  }
+                  return null;
+                },
+              ),
+
+              TextFormField(
+                controller: _typeController,
+                decoration: InputDecoration(
+                  labelText: 'Pet Type',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty){
+                    return 'Please enter a pet type';
+                  }
+                  return null;
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    if(_formKey.currentState!.validate()){
+                      //submit info to Firebase
+                      _submitForm();
+                      Navigator.pushNamed(
+                        context, '/home');
+                    }
+                  },
+                  child: const Text('Confirm'),
+                ),
+              )
+            ]),
+        ),
       ),
     );
+  }
+
+  void _submitForm(){
+    FirebaseFirestore.instance.collection('PETS').add({
+      'Name' : _nameController.text,
+      'Age' : _ageController.text,
+      'Pet Kind' : _typeController.text,
+      'Weight' : _weightController.text
+    }).then((value){
+      print(value.id);
+    });
   }
 }
